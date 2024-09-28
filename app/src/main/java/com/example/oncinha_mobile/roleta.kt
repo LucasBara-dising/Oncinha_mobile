@@ -7,11 +7,14 @@ import android.os.Bundle
 import android.os.Handler
 import android.widget.Button
 import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import org.w3c.dom.Text
+import java.util.Arrays
 import java.util.Random
 
 class roleta : AppCompatActivity() {
@@ -19,7 +22,14 @@ class roleta : AppCompatActivity() {
     private lateinit var slots_col2: Array<ImageView>
     private lateinit var slots_col3: Array<ImageView>
     private lateinit var girarButton: Button
+
+    private lateinit var InfofatecCoin: TextView
+    private lateinit var TextAposta: TextView
+
     private val random = Random()
+
+    var fatecCoin: Int=0
+    var aposta: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,6 +40,14 @@ class roleta : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+
+        TextAposta = findViewById(R.id.valorAposta)
+        aposta = TextAposta.text.toString().toInt()
+
+        InfofatecCoin = findViewById(R.id.InfoCoins)
+        fatecCoin = InfofatecCoin.text.toString().toInt()
+
+
         slots_col1 = arrayOf(
             findViewById(R.id.slot1),
             findViewById(R.id.slot2),
@@ -51,7 +69,12 @@ class roleta : AppCompatActivity() {
         girarButton = findViewById(R.id.girar_button)
 
         girarButton.setOnClickListener {
-            girarSlots()
+            if (aposta < (fatecCoin-aposta)){
+                girarSlots()
+            }
+            else{
+                Toast.makeText(this, "Saldo Insuficeinte", Toast.LENGTH_SHORT).show()
+            }
         }
     }
 
@@ -143,10 +166,32 @@ class roleta : AppCompatActivity() {
             slots_col3[i].setImageResource(getSymbolResource(resultados3[i]))
         }
 
-        // Verifica se ganhou ou perdeu
-        if (resultados3[0] == resultados3[1] && resultados3[1] == resultados3[2]) {
-            Toast.makeText(this, "Parabéns! Você ganhou!", Toast.LENGTH_SHORT).show()
-        } else {
+
+        // Verifica se ganhou ou perdel
+        if ( //Horizontal
+            resultados1[0] == resultados1[1] && resultados1[0] == resultados1[2] ||
+            resultados2[0] == resultados2[1] && resultados2[0] == resultados2[2] ||
+            resultados3[0] == resultados3[1] && resultados3[0] == resultados3[2]) {
+            aposta+=10
+        }
+
+        if (//Cruzado
+            resultados1[0] == resultados2[1] && resultados1[0] == resultados3[2] ||
+            resultados1[2] == resultados2[1] && resultados1[2] == resultados3[0]){
+            aposta+=20
+        }
+
+        if (//Vertical
+            resultados1[0] == resultados2[0] && resultados1[0] == resultados3[0] ||
+            resultados1[1] == resultados2[1] && resultados1[1] == resultados3[1] ||
+            resultados1[2] == resultados2[2] && resultados1[2] == resultados3[2]){
+            aposta+=10
+        }
+
+        if (aposta==0){
+            Toast.makeText(this, "Parabéns! Você ganhou! $aposta", Toast.LENGTH_SHORT).show()
+        }
+        else {
             Toast.makeText(this, "Que pena! Tente novamente!", Toast.LENGTH_SHORT).show()
         }
 

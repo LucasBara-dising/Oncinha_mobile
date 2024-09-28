@@ -64,7 +64,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:text="Fatec Coins"
+                android:text="Aposta"
                 app:layout_constraintEnd_toStartOf="@+id/addAposta"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -73,6 +73,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="10"
+                app:layout_constraintEnd_toEndOf="@+id/infoAposta"
                 app:layout_constraintStart_toEndOf="@+id/subAposta"
                 app:layout_constraintTop_toBottomOf="@+id/infoAposta" />
 
