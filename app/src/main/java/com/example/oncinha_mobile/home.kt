@@ -21,9 +21,10 @@ class home : AppCompatActivity() {
             insets
         }
 
-        val button: ImageView = findViewById(R.id.img_btn_entrar)
-        button.setOnClickListener {
-            val intent = Intent(this, MainActivity::class.java)
+        //Entrar
+        val img_btn_entrar: ImageView = findViewById(R.id.img_btn_entrar)
+        img_btn_entrar.setOnClickListener {
+            val intent = Intent(this, login::class.java)
             startActivity(intent)
         }
 
