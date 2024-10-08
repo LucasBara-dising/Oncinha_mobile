@@ -146,9 +146,9 @@ class roleta : AppCompatActivity() {
 
     private fun mostrarResultado() {
         // Gera números aleatórios para os símbolos
-        val resultados1 = IntArray(slots_col1.size) { random.nextInt(3) } // Exemplo: 6 símbolos possíveis
-        val resultados2 = IntArray(slots_col2.size) { random.nextInt(3) } // Exemplo: 6 símbolos possíveis
-        val resultados3 = IntArray(slots_col3.size) { random.nextInt(3) } // Exemplo: 6 símbolos possíveis
+        val resultados1 = IntArray(slots_col1.size) { random.nextInt(9) } // Exemplo: 6 símbolos possíveis
+        val resultados2 = IntArray(slots_col2.size) { random.nextInt(9) } // Exemplo: 6 símbolos possíveis
+        val resultados3 = IntArray(slots_col3.size) { random.nextInt(9) } // Exemplo: 6 símbolos possíveis
 
         // Define os símbolos de acordo com os resultados
         for (i in slots_col1.indices) {
@@ -201,10 +201,16 @@ class roleta : AppCompatActivity() {
     private fun getSymbolResource(resultado: Int): Int {
         // Substitua com suas imagens
         return when (resultado) {
-            0 -> R.drawable.sol
-            1 -> R.drawable.lua
-            2 -> R.drawable.lua_2
-            else -> R.drawable.lua
+            0 -> R.drawable.icon_boto
+            1 -> R.drawable.icon_onca
+            2 -> R.drawable.icon_arara
+            3 ->  R.drawable.icon_macaco
+            4 ->  R.drawable.icon_capivara
+            5 ->  R.drawable.icon_moedas
+            6 ->  R.drawable.icon_corpo_espinho
+            7 ->  R.drawable.icon_tucano
+            8 ->  R.drawable.icon_tesouro
+            else -> R.drawable.icon_capivara
         }
     }
 }
