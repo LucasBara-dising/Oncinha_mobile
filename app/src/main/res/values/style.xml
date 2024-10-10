@@ -3,6 +3,6 @@
     <style name="icon_roleta">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">120dp</item>
-        <item name="android:layout_marginBottom">28dp</item>
+        <item name="android:layout_marginBottom">18dp</item>
     </style>
 </resources>
