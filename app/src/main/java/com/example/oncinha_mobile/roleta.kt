@@ -6,6 +6,7 @@ import android.animation.ValueAnimator
 import android.os.Bundle
 import android.os.Handler
 import android.widget.Button
+import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
@@ -13,23 +14,28 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import org.w3c.dom.Text
-import java.util.Arrays
 import java.util.Random
 
 class roleta : AppCompatActivity() {
     private lateinit var slots_col1: Array<ImageView>
     private lateinit var slots_col2: Array<ImageView>
     private lateinit var slots_col3: Array<ImageView>
-    private lateinit var girarButton: Button
+    private lateinit var girarButton: ImageButton
 
     private lateinit var InfofatecCoin: TextView
-    private lateinit var TextAposta: TextView
+    private lateinit var addCoins: TextView
+
+    private lateinit var InfoGanhos: TextView
+
+    private lateinit var valorAposta: TextView
+    private lateinit var addAposta: TextView
+    private lateinit var subAposta: TextView
 
     private val random = Random()
 
     var fatecCoin: Int=0
     var aposta: Int = 0
+    var ganhos: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,12 +47,17 @@ class roleta : AppCompatActivity() {
             insets
         }
 
-        TextAposta = findViewById(R.id.valorAposta)
-        aposta = TextAposta.text.toString().toInt()
+        //valor da aposta
+        valorAposta = findViewById(R.id.valorAposta)
+        aposta = valorAposta.text.toString().toInt()
 
+        //valor fatec coins
         InfofatecCoin = findViewById(R.id.InfoCoins)
         fatecCoin = InfofatecCoin.text.toString().toInt()
 
+        //ganhos
+        InfoGanhos = findViewById(R.id.InfoGanhos)
+        ganhos = InfoGanhos.text.toString().toInt()
 
         slots_col1 = arrayOf(
             findViewById(R.id.slot1),
@@ -66,29 +77,59 @@ class roleta : AppCompatActivity() {
             findViewById(R.id.slot9)
         )
 
+        //roda roleta
         girarButton = findViewById(R.id.girar_button)
-
         girarButton.setOnClickListener {
             if (aposta < (fatecCoin-aposta)){
                 girarSlots()
+                Toast.makeText(this, "Roda", Toast.LENGTH_SHORT).show()
             }
             else{
                 Toast.makeText(this, "Saldo Insuficeinte", Toast.LENGTH_SHORT).show()
             }
         }
+
+        //mais moedas
+        addCoins = findViewById(R.id.addCoins)
+        addCoins.setOnClickListener {
+            //abre tela de loja
+            Toast.makeText(this, "Loja", Toast.LENGTH_SHORT).show()
+        }
+
+        //aumenta aposta
+        addAposta = findViewById(R.id.addAposta)
+        addAposta.setOnClickListener {
+            //abre tela de loja
+            if ((aposta+10)<fatecCoin){
+                aposta += 10
+                valorAposta.text = aposta.toString()
+            }else{
+                Toast.makeText(this, "Diminue a aposta", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        //diminui aposta
+        subAposta = findViewById(R.id.subAposta)
+        subAposta.setOnClickListener {
+            //abre tela de loja
+            if ((aposta-10)>0){
+                aposta -= 10
+                valorAposta.text = aposta.toString()
+            }else{
+                aposta=0
+            }
+        }
+
+
     }
 
     private fun girarSlots() {
         girarButton.isEnabled = false // Desabilita o botão durante a animação
 
         slots_col1.forEach { slot ->
-            // Animação de rotação
-            val rotation = ObjectAnimator.ofFloat(slot, "rotation", 0f, 1080f)
-            rotation.duration = 1100
-
             // Animação de movimento para cima e para baixo
-            val move = ValueAnimator.ofFloat(0f, 1000f, 0f)
-            move.duration = 1100
+            val move = ValueAnimator.ofFloat(0f, 1500f, 0f)
+            move.duration = 600
             move.addUpdateListener { animation ->
                 val value = animation.animatedValue as Float
                 slot.translationY = value
@@ -96,18 +137,14 @@ class roleta : AppCompatActivity() {
 
             // Cria um AnimatorSet e inicia as animações
             val set = AnimatorSet()
-            set.playTogether(rotation, move)
+            set.playTogether(move)
             set.start()
         }
 
         slots_col2.forEach { slot ->
-            // Animação de rotação
-            val rotation = ObjectAnimator.ofFloat(slot, "rotation", 0f, 1080f)
-            rotation.duration = 1100
-
             // Animação de movimento para cima e para baixo
-            val move = ValueAnimator.ofFloat(0f, 1500f, 0f)
-            move.duration = 1100
+            val move = ValueAnimator.ofFloat(0f, 2000f, 0f)
+            move.duration = 800
             move.addUpdateListener { animation ->
                 val value = animation.animatedValue as Float
                 slot.translationY = value
@@ -115,18 +152,14 @@ class roleta : AppCompatActivity() {
 
             // Cria um AnimatorSet e inicia as animações
             val set = AnimatorSet()
-            set.playTogether(rotation, move)
+            set.playTogether(move)
             set.start()
         }
 
         slots_col3.forEach { slot ->
-            // Animação de rotação
-            val rotation = ObjectAnimator.ofFloat(slot, "rotation", 0f, 1080f)
-            rotation.duration = 1100
-
             // Animação de movimento para cima e para baixo
-            val move = ValueAnimator.ofFloat(0f, 2000f, 0f)
-            move.duration = 1100
+            val move = ValueAnimator.ofFloat(0f, 2500f, 0f)
+            move.duration = 1000
             move.addUpdateListener { animation ->
                 val value = animation.animatedValue as Float
                 slot.translationY = value
@@ -134,14 +167,14 @@ class roleta : AppCompatActivity() {
 
             // Cria um AnimatorSet e inicia as animações
             val set = AnimatorSet()
-            set.playTogether(rotation, move)
+            set.playTogether(move)
             set.start()
         }
 
         // Aguarda 3 segundos para mostrar o resultado
         Handler().postDelayed({
             mostrarResultado()
-        }, 800)
+        }, 1100)
     }
 
     private fun mostrarResultado() {
