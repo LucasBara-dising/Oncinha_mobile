@@ -49,10 +49,6 @@ class login : AppCompatActivity() {
 
         Log.d("user", user.toString())
 
-        //Toast.makeText(this, "User $user", Toast.LENGTH_SHORT).show()
-        //Toast.makeText(this, "Senha $senha", Toast.LENGTH_SHORT).show()
-
-
         btnLogin = findViewById(R.id.btnLogin)
         btnLogin.setOnClickListener {
             // Criando uma nova fila de requisição com o Volley
@@ -71,10 +67,10 @@ class login : AppCompatActivity() {
                         if (status == "success") {
                             // Usando optString para evitar crashes
                             val nome = response.optString("nome", "Nome não disponível")
-                            val saldo = response.optString("saldo", "0")
+                            val saldo = response.optString("saldo", 0.toString())
 
                             // Log para debug
-                            println("Nome: $nome, Saldo: $saldo")
+                            Log.d("corpo", response.toString())
 
                             // Redireciona para a DashboardActivity
                             val intent = Intent(this, MainActivity::class.java)

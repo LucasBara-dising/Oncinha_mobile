@@ -1,11 +1,11 @@
 package com.example.oncinha_mobile
 
 import android.animation.AnimatorSet
-import android.animation.ObjectAnimator
 import android.animation.ValueAnimator
+import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
-import android.widget.Button
+import android.util.Log
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
@@ -14,6 +14,11 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.android.volley.Request
+import com.android.volley.toolbox.JsonObjectRequest
+import com.android.volley.toolbox.Volley
+import org.json.JSONArray
+import org.json.JSONObject
 import java.util.Random
 
 class roleta : AppCompatActivity() {
@@ -21,6 +26,8 @@ class roleta : AppCompatActivity() {
     private lateinit var slots_col2: Array<ImageView>
     private lateinit var slots_col3: Array<ImageView>
     private lateinit var girarButton: ImageButton
+
+    private lateinit var btn_home: ImageView
 
     private lateinit var InfofatecCoin: TextView
     private lateinit var addCoins: TextView
@@ -30,11 +37,13 @@ class roleta : AppCompatActivity() {
     private lateinit var valorAposta: TextView
     private lateinit var addAposta: TextView
     private lateinit var subAposta: TextView
+    private lateinit var resultadoJogo: TextView
+
 
     private val random = Random()
 
     var fatecCoin: Int=0
-    var aposta: Int = 0
+    var aposta: Int = 10
     var ganhos: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -47,11 +56,16 @@ class roleta : AppCompatActivity() {
             insets
         }
 
+        resultadoJogo = findViewById(R.id.textViewResultadoJogo)
+
         //valor da aposta
         valorAposta = findViewById(R.id.valorAposta)
         aposta = valorAposta.text.toString().toInt()
 
         //valor fatec coins
+//        val intent = intent
+//        fatecCoin = intent.getIntExtra("saldo",0)
+
         InfofatecCoin = findViewById(R.id.InfoCoins)
         fatecCoin = InfofatecCoin.text.toString().toInt()
 
@@ -82,7 +96,6 @@ class roleta : AppCompatActivity() {
         girarButton.setOnClickListener {
             if (aposta < (fatecCoin-aposta)){
                 girarSlots()
-                Toast.makeText(this, "Roda", Toast.LENGTH_SHORT).show()
             }
             else{
                 Toast.makeText(this, "Saldo Insuficeinte", Toast.LENGTH_SHORT).show()
@@ -93,7 +106,15 @@ class roleta : AppCompatActivity() {
         addCoins = findViewById(R.id.addCoins)
         addCoins.setOnClickListener {
             //abre tela de loja
-            Toast.makeText(this, "Loja", Toast.LENGTH_SHORT).show()
+            val intent = Intent(this, mercado::class.java)
+            startActivity(intent)
+        }
+
+        //home
+        btn_home = findViewById(R.id.imageViewHome)
+        btn_home.setOnClickListener {
+            val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
         }
 
         //aumenta aposta
@@ -120,130 +141,137 @@ class roleta : AppCompatActivity() {
             }
         }
 
-
     }
 
     private fun girarSlots() {
-        girarButton.isEnabled = false // Desabilita o botão durante a animação
+        //girarButton.isEnabled = false // Desabilita o botão durante a animação
 
-        slots_col1.forEach { slot ->
-            // Animação de movimento para cima e para baixo
-            val move = ValueAnimator.ofFloat(0f, 1500f, 0f)
-            move.duration = 600
-            move.addUpdateListener { animation ->
-                val value = animation.animatedValue as Float
-                slot.translationY = value
+        val url = "https://oncita.brazilsouth.cloudapp.azure.com/apimobile/roleta.php"  // Substitua pela URL do seu servidor
+
+        // Cria o objeto JSON para enviar
+        val params = HashMap<String, String>()
+        params["usuario"] = "luchas"  // Substitua com o nome real do usuário
+        params["aposta"] = aposta.toString()
+        val jsonObject = JSONObject(params as Map<*, *>)
+
+//        slots_col1.forEach { slot ->
+//            // Animação de movimento para cima e para baixo
+//            val move = ValueAnimator.ofFloat(0f, 1500f, 0f)
+//            move.duration = 600
+//            move.addUpdateListener { animation ->
+//                val value = animation.animatedValue as Float
+//                slot.translationY = value
+//            }
+//
+//            // Cria um AnimatorSet e inicia as animações
+//            val set = AnimatorSet()
+//            set.playTogether(move)
+//            set.start()
+//        }
+//        slots_col2.forEach { slot ->
+//            // Animação de movimento para cima e para baixo
+//            val move = ValueAnimator.ofFloat(0f, 2000f, 0f)
+//            move.duration = 800
+//            move.addUpdateListener { animation ->
+//                val value = animation.animatedValue as Float
+//                slot.translationY = value
+//            }
+//
+//            // Cria um AnimatorSet e inicia as animações
+//            val set = AnimatorSet()
+//            set.playTogether(move)
+//            set.start()
+//        }
+//
+//        slots_col3.forEach { slot ->
+//            // Animação de movimento para cima e para baixo
+//            val move = ValueAnimator.ofFloat(0f, 2500f, 0f)
+//            move.duration = 1000
+//            move.addUpdateListener { animation ->
+//                val value = animation.animatedValue as Float
+//                slot.translationY = value
+//            }
+//
+//            // Cria um AnimatorSet e inicia as animações
+//            val set = AnimatorSet()
+//            set.playTogether(move)
+//            set.start()
+//        }
+
+
+        // Fazendo a requisição com Volley
+        val requestQueue = Volley.newRequestQueue(this)
+        val jsonObjectRequest = JsonObjectRequest(
+            Request.Method.POST, url, jsonObject,
+            { response ->
+                try {
+                    // Lendo a resposta JSON
+                    val status = response.getString("status")
+                    if (status == "success") {
+                        val novoSaldo = response.getInt("saldo")
+                        val resultado = response.getJSONArray("resultado")
+                        val message = response.getString("message")
+
+                        // Log para debug
+                        Log.d("corpo", response.toString())
+
+                        // Atualiza o saldo do usuário
+                        fatecCoin = novoSaldo
+                        InfofatecCoin.text = novoSaldo.toString()
+
+                        // Exibe a mensagem
+                        resultadoJogo.text= message
+
+                        // Atualiza os slots
+                        atualizarSlots(resultado)
+                    } else {
+                        val errorMessage = response.getString("message")
+                        Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT).show()
+                    }
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                    Toast.makeText(this, "Erro no processamento da resposta", Toast.LENGTH_SHORT).show()
+                }
+            },
+            {
+                Toast.makeText(this, "Erro na conexão com o servidor", Toast.LENGTH_SHORT).show()
             }
-
-            // Cria um AnimatorSet e inicia as animações
-            val set = AnimatorSet()
-            set.playTogether(move)
-            set.start()
-        }
-
-        slots_col2.forEach { slot ->
-            // Animação de movimento para cima e para baixo
-            val move = ValueAnimator.ofFloat(0f, 2000f, 0f)
-            move.duration = 800
-            move.addUpdateListener { animation ->
-                val value = animation.animatedValue as Float
-                slot.translationY = value
-            }
-
-            // Cria um AnimatorSet e inicia as animações
-            val set = AnimatorSet()
-            set.playTogether(move)
-            set.start()
-        }
-
-        slots_col3.forEach { slot ->
-            // Animação de movimento para cima e para baixo
-            val move = ValueAnimator.ofFloat(0f, 2500f, 0f)
-            move.duration = 1000
-            move.addUpdateListener { animation ->
-                val value = animation.animatedValue as Float
-                slot.translationY = value
-            }
-
-            // Cria um AnimatorSet e inicia as animações
-            val set = AnimatorSet()
-            set.playTogether(move)
-            set.start()
-        }
+        )
 
         // Aguarda 3 segundos para mostrar o resultado
-        Handler().postDelayed({
-            mostrarResultado()
-        }, 1100)
+//        Handler().postDelayed({
+//            // Adiciona a requisição à fila
+           requestQueue.add(jsonObjectRequest)
+//            //mostrarResultado()
+//        }, 1100)
+
+        //girarButton.isEnabled = true // Habilita o botão novamente
     }
 
-    private fun mostrarResultado() {
-        // Gera números aleatórios para os símbolos
-        val resultados1 = IntArray(slots_col1.size) { random.nextInt(9) } // Exemplo: 6 símbolos possíveis
-        val resultados2 = IntArray(slots_col2.size) { random.nextInt(9) } // Exemplo: 6 símbolos possíveis
-        val resultados3 = IntArray(slots_col3.size) { random.nextInt(9) } // Exemplo: 6 símbolos possíveis
-
-        // Define os símbolos de acordo com os resultados
-        for (i in slots_col1.indices) {
-            // Define a imagem do slot com base no resultado (resultados[i])
-            slots_col1[i].setImageResource(getSymbolResource(resultados1[i]))
+    private fun atualizarSlots(resultado: JSONArray) {
+        // Exemplo de como atualizar os slots com o resultado recebido da API
+        for (i in 0 until resultado.length()) {
+            val coluna = resultado.getJSONArray(i)
+            Log.d("coluna", coluna.toString())
+            slots_col1[i].setImageResource(getSymbolResource(coluna.getString(0)))
+            slots_col2[i].setImageResource(getSymbolResource(coluna.getString(1)))
+            slots_col3[i].setImageResource(getSymbolResource(coluna.getString(2)))
         }
-
-        for (i in slots_col2.indices) {
-            // Define a imagem do slot com base no resultado (resultados[i])
-            slots_col2[i].setImageResource(getSymbolResource(resultados2[i]))
-        }
-
-        for (i in slots_col3.indices) {
-            // Define a imagem do slot com base no resultado (resultados[i])
-            slots_col3[i].setImageResource(getSymbolResource(resultados3[i]))
-        }
-
-
-        // Verifica se ganhou ou perdel
-        if ( //Horizontal
-            resultados1[0] == resultados1[1] && resultados1[0] == resultados1[2] ||
-            resultados2[0] == resultados2[1] && resultados2[0] == resultados2[2] ||
-            resultados3[0] == resultados3[1] && resultados3[0] == resultados3[2]) {
-            aposta+=10
-        }
-
-        if (//Cruzado
-            resultados1[0] == resultados2[1] && resultados1[0] == resultados3[2] ||
-            resultados1[2] == resultados2[1] && resultados1[2] == resultados3[0]){
-            aposta+=20
-        }
-
-        if (//Vertical
-            resultados1[0] == resultados2[0] && resultados1[0] == resultados3[0] ||
-            resultados1[1] == resultados2[1] && resultados1[1] == resultados3[1] ||
-            resultados1[2] == resultados2[2] && resultados1[2] == resultados3[2]){
-            aposta+=10
-        }
-
-        if (aposta==0){
-            Toast.makeText(this, "Parabéns! Você ganhou! $aposta", Toast.LENGTH_SHORT).show()
-        }
-        else {
-            Toast.makeText(this, "Que pena! Tente novamente!", Toast.LENGTH_SHORT).show()
-        }
-
-        girarButton.isEnabled = true // Habilita o botão novamente
     }
 
-    private fun getSymbolResource(resultado: Int): Int {
+    private fun getSymbolResource(resultado: String): Int {
         // Substitua com suas imagens
         return when (resultado) {
-            0 -> R.drawable.icon_boto
-            1 -> R.drawable.icon_onca
-            2 -> R.drawable.icon_arara
-            3 ->  R.drawable.icon_macaco
-            4 ->  R.drawable.icon_capivara
-            5 ->  R.drawable.icon_moedas
-            6 ->  R.drawable.icon_corpo_espinho
-            7 ->  R.drawable.icon_tucano
-            8 ->  R.drawable.icon_tesouro
-            else -> R.drawable.icon_capivara
+            "Boto" -> R.drawable.icon_boto
+            "Onça" -> R.drawable.icon_onca
+            "Arara" -> R.drawable.icon_arara
+            "Macaco" -> R.drawable.icon_macaco
+            "Capivara" -> R.drawable.icon_capivara
+            "Moedas" -> R.drawable.icon_moedas
+            "Espinho" -> R.drawable.icon_corpo_espinho
+            "Tucano" -> R.drawable.icon_tucano
+            "Tesouro" -> R.drawable.icon_tesouro
+            else -> R.drawable.icon_capivara  // Um ícone padrão
         }
     }
 }
