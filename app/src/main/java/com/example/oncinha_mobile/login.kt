@@ -67,7 +67,7 @@ class login : AppCompatActivity() {
                         if (status == "success") {
                             // Usando optString para evitar crashes
                             val nome = response.optString("nome", "Nome não disponível")
-                            val saldo = response.optString("saldo", 0.toString())
+                            val saldo = response.optInt("saldo")
 
                             // Log para debug
                             Log.d("corpo", response.toString())
@@ -76,6 +76,7 @@ class login : AppCompatActivity() {
                             val intent = Intent(this, MainActivity::class.java)
                             intent.putExtra("nome", nome)
                             intent.putExtra("saldo", saldo)
+
                             startActivity(intent)
                             finish() // Finaliza a MainActivity
                         } else {

@@ -1,10 +1,7 @@
 package com.example.oncinha_mobile
 
-import android.animation.AnimatorSet
-import android.animation.ValueAnimator
 import android.content.Intent
 import android.os.Bundle
-import android.os.Handler
 import android.util.Log
 import android.widget.ImageButton
 import android.widget.ImageView
@@ -19,9 +16,8 @@ import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
 import org.json.JSONArray
 import org.json.JSONObject
-import java.util.Random
 
-class roleta : AppCompatActivity() {
+class Roleta : AppCompatActivity() {
     private lateinit var slots_col1: Array<ImageView>
     private lateinit var slots_col2: Array<ImageView>
     private lateinit var slots_col3: Array<ImageView>
@@ -39,12 +35,10 @@ class roleta : AppCompatActivity() {
     private lateinit var subAposta: TextView
     private lateinit var resultadoJogo: TextView
 
-
-    private val random = Random()
-
-    var fatecCoin: Int=0
+    var fatecCoin: Int=1000
     var aposta: Int = 10
     var ganhos: Int = 0
+    var user=""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -62,11 +56,17 @@ class roleta : AppCompatActivity() {
         valorAposta = findViewById(R.id.valorAposta)
         aposta = valorAposta.text.toString().toInt()
 
+        val intentMain = intent
+        //get user
+        user = intentMain.getStringExtra("nome").toString()
+
         //valor fatec coins
-//        val intent = intent
-//        fatecCoin = intent.getIntExtra("saldo",0)
+        fatecCoin = intentMain.getIntExtra("saldo",0)
+        Log.d("saldo", fatecCoin.toString())
 
         InfofatecCoin = findViewById(R.id.InfoCoins)
+        InfofatecCoin.text = fatecCoin.toString()
+
         fatecCoin = InfofatecCoin.text.toString().toInt()
 
         //ganhos
@@ -94,7 +94,7 @@ class roleta : AppCompatActivity() {
         //roda roleta
         girarButton = findViewById(R.id.girar_button)
         girarButton.setOnClickListener {
-            if (aposta < (fatecCoin-aposta)){
+            if (aposta <= (fatecCoin-aposta)){
                 girarSlots()
             }
             else{
@@ -150,7 +150,7 @@ class roleta : AppCompatActivity() {
 
         // Cria o objeto JSON para enviar
         val params = HashMap<String, String>()
-        params["usuario"] = "luchas"  // Substitua com o nome real do usuário
+        params["usuario"] = user  // Substitua com o nome real do usuário
         params["aposta"] = aposta.toString()
         val jsonObject = JSONObject(params as Map<*, *>)
 

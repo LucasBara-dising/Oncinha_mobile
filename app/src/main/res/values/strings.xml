@@ -1,3 +1,17 @@
 <resources>
-    <string name="app_name">Oncinha_Mobile</string>
+    <string name="app_name">Oncinha</string>
+    <string name="txtOpcoes">Opçoes</string>
+    <string name="txtRegistrar">Registrar</string>
+    <string name="TxtEntrar">Entrar</string>
+    <string name="txtUser">User</string>
+    <string name="txtSenha">senha</string>
+    <string name="txtLogin">LOGIN</string>
+    <string name="txtCadastre_se">Cadastre-se</string>
+    <string name="txtMissao">Missão</string>
+    <string name="txtLoja">Loja</string>
+    <string name="TxtJogar">Jogar</string>
+    <string name="txtMoedas">Moedas</string>
+    <string name="txtGirar">Girar</string>
+    <string name="txtSaldo">Saldo</string>
+    <string name="txtGanhos">Ganhos</string>
 </resources>

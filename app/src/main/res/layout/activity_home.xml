@@ -30,7 +30,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Entrar"
+        android:text="@string/TxtEntrar"
         android:textColor="@color/yellow"
         android:layout_marginTop="12dp"
         android:textSize="18sp"
@@ -55,7 +55,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
-        android:text="Registrar"
+        android:text="@string/txtRegistrar"
         android:textColor="@color/yellow"
         android:textSize="18sp"
         android:textStyle="bold"
@@ -79,7 +79,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
-        android:text="Opçoes"
+        android:text="@string/txtOpcoes"
         android:textColor="@color/yellow"
         android:textSize="18sp"
         android:textStyle="bold"
@@ -95,7 +95,5 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:srcCompat="@drawable/onca" />
-
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

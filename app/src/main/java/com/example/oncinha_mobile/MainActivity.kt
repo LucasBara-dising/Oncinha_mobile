@@ -2,6 +2,7 @@ package com.example.oncinha_mobile
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
@@ -17,6 +18,10 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var textView_saldo: TextView
 
+    var user =""
+    var saldo = 0
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -28,14 +33,12 @@ class MainActivity : AppCompatActivity() {
         }
 
         val intentLogin = intent
-        val user = intentLogin.getStringExtra("nome")
-        //val saldo = intentLogin.getIntExtra("saldo",0)
-
-        //println(saldo)
+        user = intentLogin.getStringExtra("nome").toString()
+        saldo = intentLogin.getIntExtra("saldo",0)
 
 
         textView_saldo= findViewById(R.id.textView_saldo)
-        //textView_saldo.text = saldo.toString()
+        textView_saldo.text = "$ $saldo"
 
         Toast.makeText(this, "Bom dia $user", Toast.LENGTH_SHORT).show()
 
@@ -51,7 +54,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun abreRoleta(){
-        val intent = Intent(this, roleta::class.java)
+        val intent = Intent(this, Roleta::class.java)
+        intent.putExtra("nome", user)
+        intent.putExtra("saldo", saldo)
         startActivity(intent)
     }
 
