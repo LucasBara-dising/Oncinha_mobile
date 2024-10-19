@@ -1,5 +1,6 @@
 package com.example.oncinha_mobile
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -143,6 +144,7 @@ class Roleta : AppCompatActivity() {
 
     }
 
+    @SuppressLint("SuspiciousIndentation")
     private fun girarSlots() {
         //girarButton.isEnabled = false // Desabilita o botão durante a animação
 
