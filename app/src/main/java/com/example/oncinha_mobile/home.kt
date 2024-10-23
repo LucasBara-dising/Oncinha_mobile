@@ -28,6 +28,13 @@ class home : AppCompatActivity() {
             startActivity(intent)
         }
 
+        //Cadastro
+        val image_btn_jogar: ImageView = findViewById(R.id.image_btn_jogar)
+        image_btn_jogar.setOnClickListener {
+            val intent = Intent(this, cadastro::class.java)
+            startActivity(intent)
+        }
+
     }
 
 }

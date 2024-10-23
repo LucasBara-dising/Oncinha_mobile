@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_login"
+    android:padding="0dp"
+    tools:context=".cadastro">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="120dp"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:id="@+id/imageView5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="32dp"
+            android:layout_marginRight="32dp"
+            android:layout_marginBottom="80dp"
+            android:layout_marginTop="180dp"
+            android:background="@drawable/retangulo_login"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                style="@style/cadastro_text"
+                android:text="@string/txtCadastre_se"
+                android:textAlignment="center" />
+
+            <ImageView
+                android:id="@+id/imageView2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="12dp"
+                app:srcCompat="@drawable/img_btn_entrar" />
+
+            <TextView
+                style="@style/cadastro_text"
+                android:text="@string/txtUser" />
+
+            <EditText
+                android:id="@+id/inputUser"
+                style="@style/cadastro_editText"
+                android:hint="@string/txtUser"
+                android:inputType="text" />
+
+            <TextView
+                style="@style/cadastro_text"
+                android:text="Email" />
+
+            <EditText
+                android:id="@+id/inputEmail"
+                style="@style/cadastro_editText"
+                android:hint="email"
+                android:inputType="textEmailAddress" />
+
+            <TextView
+                style="@style/cadastro_text"
+                android:text="@string/txtSenha" />
+
+            <EditText
+                android:id="@+id/inputSenha"
+                style="@style/cadastro_editText"
+                android:hint="@string/txtSenha"
+                android:inputType="text|textPassword" />
+
+            <TextView
+                style="@style/cadastro_text"
+                android:text="Confirmar Senha" />
+
+            <EditText
+                android:id="@+id/inputSenhaConfirma"
+                style="@style/cadastro_editText"
+                android:hint="@string/txtSenha"
+                android:inputType="textPassword" />
+
+            <TextView
+                style="@style/cadastro_text"
+                android:text="Chave Pix" />
+
+            <EditText
+                android:id="@+id/inputpix"
+                style="@style/cadastro_editText"
+                android:hint="Pix"
+                android:inputType="text" />
+
+            <TextView
+                style="@style/cadastro_text"
+                android:text="CPF" />
+
+            <EditText
+                android:id="@+id/inputCPF"
+                style="@style/cadastro_editText"
+                android:hint="CPF"
+                android:inputType="number" />
+
+
+            <Button
+                android:id="@+id/btnLogin"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="24dp"
+                android:layout_marginBottom="24dp"
+                android:backgroundTint="#9905520A"
+                android:letterSpacing="0.3"
+                android:text="@string/txtCadastre_se"
+                android:textColor="#FFCB00"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/inputSenha" />
+
+        </LinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</ScrollView>

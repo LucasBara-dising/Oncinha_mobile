@@ -7,6 +7,7 @@ import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -22,6 +23,7 @@ class login : AppCompatActivity() {
     private lateinit var inputUser : EditText
     private lateinit var inputSenha : EditText
     private lateinit var btnLogin: Button
+    private lateinit var textViewCadastro: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -101,11 +103,16 @@ class login : AppCompatActivity() {
             requestQueue.add(jsonObjectRequest)
         }
 
+        textViewCadastro = findViewById(R.id.textViewCadastro)
+        textViewCadastro.setOnClickListener {
+            telaCadastro()
+        }
+
 
     }
 
-    private fun login(){
-        val intent = Intent(this, MainActivity::class.java)
+    private fun telaCadastro(){
+        val intent = Intent(this, cadastro::class.java)
         startActivity(intent)
         finish() // Finaliza a MainActivity
     }
