@@ -148,7 +148,7 @@ class Roleta : AppCompatActivity() {
     private fun girarSlots() {
         //girarButton.isEnabled = false // Desabilita o botão durante a animação
 
-        val url = "https://oncita.brazilsouth.cloudapp.azure.com/apimobile/roleta.php"  // Substitua pela URL do seu servidor
+        val url = "https://oncinha.brazilsouth.cloudapp.azure.com/apimobile/roleta.php"  // Substitua pela URL do seu servidor
 
         // Cria o objeto JSON para enviar
         val params = HashMap<String, String>()

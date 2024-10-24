@@ -42,7 +42,7 @@ class login : AppCompatActivity() {
         val senha = inputSenha.text
 
         // URL do servidor onde está o login.php
-        val url = "http://104.41.57.11/apimobile/login.php"
+        val url = "https://oncinha.brazilsouth.cloudapp.azure.com/apimobile/login.php"
 
         // Criando o objeto JSON com os dados de login
         val jsonBody = JSONObject()
