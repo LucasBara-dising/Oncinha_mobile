@@ -67,6 +67,7 @@
 
 
         <androidx.cardview.widget.CardView
+            android:id="@+id/add10Moedas"
             style="@style/card_loja"
             app:cardBackgroundColor="@color/green"
             app:cardCornerRadius="16dp"
@@ -97,6 +98,7 @@
         </androidx.cardview.widget.CardView>
 
         <androidx.cardview.widget.CardView
+            android:id="@+id/add100Moedas"
             style="@style/card_loja"
             app:cardBackgroundColor="@color/green"
             app:cardCornerRadius="16dp"

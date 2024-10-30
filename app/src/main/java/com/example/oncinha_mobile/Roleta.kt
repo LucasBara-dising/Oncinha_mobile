@@ -1,5 +1,7 @@
 package com.example.oncinha_mobile
 
+import android.animation.AnimatorSet
+import android.animation.ValueAnimator
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
@@ -108,6 +110,8 @@ class Roleta : AppCompatActivity() {
         addCoins.setOnClickListener {
             //abre tela de loja
             val intent = Intent(this, mercado::class.java)
+            intent.putExtra("nome", user)
+            intent.putExtra("saldo", fatecCoin)
             startActivity(intent)
         }
 
@@ -115,6 +119,8 @@ class Roleta : AppCompatActivity() {
         btn_home = findViewById(R.id.imageViewHome)
         btn_home.setOnClickListener {
             val intent = Intent(this, MainActivity::class.java)
+            intent.putExtra("nome", user)
+            intent.putExtra("saldo", fatecCoin)
             startActivity(intent)
         }
 
@@ -146,7 +152,7 @@ class Roleta : AppCompatActivity() {
 
     @SuppressLint("SuspiciousIndentation")
     private fun girarSlots() {
-        //girarButton.isEnabled = false // Desabilita o botão durante a animação
+        girarButton.isEnabled = false // Desabilita o botão durante a animação
 
         val url = "https://oncinha.brazilsouth.cloudapp.azure.com/apimobile/roleta.php"  // Substitua pela URL do seu servidor
 
@@ -156,102 +162,98 @@ class Roleta : AppCompatActivity() {
         params["aposta"] = aposta.toString()
         val jsonObject = JSONObject(params as Map<*, *>)
 
-//        slots_col1.forEach { slot ->
-//            // Animação de movimento para cima e para baixo
-//            val move = ValueAnimator.ofFloat(0f, 1500f, 0f)
-//            move.duration = 600
-//            move.addUpdateListener { animation ->
-//                val value = animation.animatedValue as Float
-//                slot.translationY = value
-//            }
-//
-//            // Cria um AnimatorSet e inicia as animações
-//            val set = AnimatorSet()
-//            set.playTogether(move)
-//            set.start()
-//        }
-//        slots_col2.forEach { slot ->
-//            // Animação de movimento para cima e para baixo
-//            val move = ValueAnimator.ofFloat(0f, 2000f, 0f)
-//            move.duration = 800
-//            move.addUpdateListener { animation ->
-//                val value = animation.animatedValue as Float
-//                slot.translationY = value
-//            }
-//
-//            // Cria um AnimatorSet e inicia as animações
-//            val set = AnimatorSet()
-//            set.playTogether(move)
-//            set.start()
-//        }
-//
-//        slots_col3.forEach { slot ->
-//            // Animação de movimento para cima e para baixo
-//            val move = ValueAnimator.ofFloat(0f, 2500f, 0f)
-//            move.duration = 1000
-//            move.addUpdateListener { animation ->
-//                val value = animation.animatedValue as Float
-//                slot.translationY = value
-//            }
-//
-//            // Cria um AnimatorSet e inicia as animações
-//            val set = AnimatorSet()
-//            set.playTogether(move)
-//            set.start()
-//        }
 
+            // Fazendo a requisição com Volley
+            val requestQueue = Volley.newRequestQueue(this)
+            val jsonObjectRequest = JsonObjectRequest(
+                Request.Method.POST, url, jsonObject,
+                { response ->
+                    try {
+                        // Lendo a resposta JSON
+                        val status = response.getString("status")
+                        if (status == "success") {
+                            val novoSaldo = response.getInt("saldo")
+                            val resultado = response.getJSONArray("resultado")
+                            val message = response.getString("message")
 
-        // Fazendo a requisição com Volley
-        val requestQueue = Volley.newRequestQueue(this)
-        val jsonObjectRequest = JsonObjectRequest(
-            Request.Method.POST, url, jsonObject,
-            { response ->
-                try {
-                    // Lendo a resposta JSON
-                    val status = response.getString("status")
-                    if (status == "success") {
-                        val novoSaldo = response.getInt("saldo")
-                        val resultado = response.getJSONArray("resultado")
-                        val message = response.getString("message")
+                            // Log para debug
+                            Log.d("corpo", response.toString())
 
-                        // Log para debug
-                        Log.d("corpo", response.toString())
+                            // Atualiza o saldo do usuário
+                            fatecCoin = novoSaldo
+                            InfofatecCoin.text = novoSaldo.toString()
 
-                        // Atualiza o saldo do usuário
-                        fatecCoin = novoSaldo
-                        InfofatecCoin.text = novoSaldo.toString()
+                            // Exibe a mensagem
+                            resultadoJogo.text= message
 
-                        // Exibe a mensagem
-                        resultadoJogo.text= message
-
-                        // Atualiza os slots
-                        atualizarSlots(resultado)
-                    } else {
-                        val errorMessage = response.getString("message")
-                        Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT).show()
+                            // Atualiza os slots e animada
+                            atualizarSlots(resultado)
+                        } else {
+                            val errorMessage = response.getString("message")
+                            Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT).show()
+                        }
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                        Toast.makeText(this, "Erro no processamento da resposta", Toast.LENGTH_SHORT).show()
                     }
-                } catch (e: Exception) {
-                    e.printStackTrace()
-                    Toast.makeText(this, "Erro no processamento da resposta", Toast.LENGTH_SHORT).show()
+                },
+                {
+                    Toast.makeText(this, "Erro na conexão com o servidor", Toast.LENGTH_SHORT).show()
                 }
-            },
-            {
-                Toast.makeText(this, "Erro na conexão com o servidor", Toast.LENGTH_SHORT).show()
-            }
-        )
-
-        // Aguarda 3 segundos para mostrar o resultado
-//        Handler().postDelayed({
-//            // Adiciona a requisição à fila
+            )
+            // Adiciona a requisição à fila
            requestQueue.add(jsonObjectRequest)
-//            //mostrarResultado()
-//        }, 1100)
 
-        //girarButton.isEnabled = true // Habilita o botão novamente
+        girarButton.isEnabled = true // Habilita o botão novamente
     }
 
     private fun atualizarSlots(resultado: JSONArray) {
-        // Exemplo de como atualizar os slots com o resultado recebido da API
+        //Anima Slots
+
+        slots_col1.forEach { slot ->
+            // Animação de movimento para cima e para baixo
+            val move = ValueAnimator.ofFloat(0f, 1500f, 0f)
+            move.duration = 600
+            move.addUpdateListener { animation ->
+                val value = animation.animatedValue as Float
+                slot.translationY = value
+            }
+
+            // Cria um AnimatorSet e inicia as animações
+            val set = AnimatorSet()
+            set.playTogether(move)
+            set.start()
+        }
+        slots_col2.forEach { slot ->
+            // Animação de movimento para cima e para baixo
+            val move = ValueAnimator.ofFloat(0f, 2000f, 0f)
+            move.duration = 800
+            move.addUpdateListener { animation ->
+                val value = animation.animatedValue as Float
+                slot.translationY = value
+            }
+
+            // Cria um AnimatorSet e inicia as animações
+            val set = AnimatorSet()
+            set.playTogether(move)
+            set.start()
+        }
+
+        slots_col3.forEach { slot ->
+            // Animação de movimento para cima e para baixo
+            val move = ValueAnimator.ofFloat(0f, 2500f, 0f)
+            move.duration = 1000
+            move.addUpdateListener { animation ->
+                val value = animation.animatedValue as Float
+                slot.translationY = value
+            }
+
+            // Cria um AnimatorSet e inicia as animações
+            val set = AnimatorSet()
+            set.playTogether(move)
+            set.start()
+        }
+
         for (i in 0 until resultado.length()) {
             val coluna = resultado.getJSONArray(i)
             Log.d("coluna", coluna.toString())

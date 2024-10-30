@@ -62,6 +62,8 @@ class MainActivity : AppCompatActivity() {
 
     private fun abreLoja(){
         val intent = Intent(this, mercado::class.java)
+        intent.putExtra("nome", user)
+        intent.putExtra("saldo", saldo)
         startActivity(intent)
     }
 }
