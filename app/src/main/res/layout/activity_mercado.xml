@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/bg_escuro"
-    tools:context=".mercado">
+    tools:context=".Mercado">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -31,6 +31,7 @@
         android:layout_marginTop="42dp"
         android:padding="4dp"
         android:textAlignment="center"
+        android:textColor="@color/black"
         android:text="R$ 2.012,10"
         android:background="@drawable/arredondado_amarelo"
         app:layout_constraintEnd_toEndOf="parent"
@@ -74,6 +75,7 @@
             app:cardElevation="5dp">
 
             <ImageView
+                android:id="@+id/moedas1"
                 style="@style/card_loja_img"
                 android:contentDescription="@string/app_name"
                 android:src="@drawable/icon_moedas" />
@@ -130,6 +132,41 @@
     </LinearLayout>
 
 
+        <TextView
+            android:id="@+id/textViewBagdes"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="84dp"
+            android:layout_marginTop="22dp"
+            android:layout_marginEnd="84dp"
+            android:background="@drawable/arredondado_verde"
+            android:padding="4dp"
+            android:text="Bagdes"
+            android:textAlignment="center"
+            android:textColor="@color/yellow"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/box_moeda" />
+
+        <LinearLayout
+            android:id="@+id/box_bagdes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textViewBagdes">
+
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerView"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"/>
+
+        </LinearLayout>
+
     <TextView
         android:id="@+id/textViewAvatares"
         android:layout_width="match_parent"
@@ -145,7 +182,7 @@
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/box_moeda" />
+        app:layout_constraintTop_toBottomOf="@+id/box_bagdes" />
 
     <LinearLayout
         android:id="@+id/avaresCol1"

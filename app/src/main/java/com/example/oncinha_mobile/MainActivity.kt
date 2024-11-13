@@ -2,7 +2,6 @@ package com.example.oncinha_mobile
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
@@ -14,12 +13,12 @@ import androidx.core.view.WindowInsetsCompat
 class MainActivity : AppCompatActivity() {
 
     private lateinit var btnJogar: ImageView
-    private lateinit var btn_loja: ImageView
+    private lateinit var btnLoja: ImageView
 
-    private lateinit var textView_saldo: TextView
+    private lateinit var textviewSaldo: TextView
 
-    var user =""
-    var saldo = 0
+    private var user =""
+    private var saldo = 0
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -37,8 +36,8 @@ class MainActivity : AppCompatActivity() {
         saldo = intentLogin.getIntExtra("saldo",0)
 
 
-        textView_saldo= findViewById(R.id.textView_saldo)
-        textView_saldo.text = "$ $saldo"
+        textviewSaldo= findViewById(R.id.textView_saldo)
+        textviewSaldo.text = "$ $saldo"
 
         Toast.makeText(this, "Bom dia $user", Toast.LENGTH_SHORT).show()
 
@@ -47,8 +46,8 @@ class MainActivity : AppCompatActivity() {
             abreRoleta()
         }
 
-        btn_loja = findViewById(R.id.image_btn_loja)
-        btn_loja.setOnClickListener {
+        btnLoja = findViewById(R.id.image_btn_loja)
+        btnLoja.setOnClickListener {
             abreLoja()
         }
     }
@@ -61,7 +60,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun abreLoja(){
-        val intent = Intent(this, mercado::class.java)
+        val intent = Intent(this, Mercado::class.java)
         intent.putExtra("nome", user)
         intent.putExtra("saldo", saldo)
         startActivity(intent)

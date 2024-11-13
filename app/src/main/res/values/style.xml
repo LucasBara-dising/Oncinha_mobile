@@ -2,7 +2,7 @@
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
     <style name="icon_roleta">
         <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">120dp</item>
+        <item name="android:layout_height">110dp</item>
         <item name="android:layout_marginBottom">18dp</item>
     </style>
 
@@ -24,7 +24,7 @@
     <style name="card_loja_text">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_marginTop">160dp</item>
+        <item name="android:layout_marginTop">200dp</item>
         <item name="android:layout_marginBottom">16dp</item>
         <item name="android:layout_marginStart">14dp</item>
         <item name="android:layout_marginEnd">14dp</item>

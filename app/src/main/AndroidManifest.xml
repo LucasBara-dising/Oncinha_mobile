@@ -19,7 +19,7 @@
             android:name=".cadastro"
             android:exported="false" />
         <activity
-            android:name=".mercado"
+            android:name=".Mercado"
             android:exported="false" />
         <activity
             android:name=".login"

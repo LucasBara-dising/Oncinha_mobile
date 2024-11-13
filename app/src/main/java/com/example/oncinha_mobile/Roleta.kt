@@ -21,27 +21,27 @@ import org.json.JSONArray
 import org.json.JSONObject
 
 class Roleta : AppCompatActivity() {
-    private lateinit var slots_col1: Array<ImageView>
-    private lateinit var slots_col2: Array<ImageView>
-    private lateinit var slots_col3: Array<ImageView>
+    private lateinit var slotsCol1: Array<ImageView>
+    private lateinit var slotsCol2: Array<ImageView>
+    private lateinit var slotsCol3: Array<ImageView>
     private lateinit var girarButton: ImageButton
 
-    private lateinit var btn_home: ImageView
+    private lateinit var btnHome: ImageView
 
-    private lateinit var InfofatecCoin: TextView
+    private lateinit var infofatecCoin: TextView
     private lateinit var addCoins: TextView
 
-    private lateinit var InfoGanhos: TextView
+    private lateinit var infoGanhos: TextView
 
     private lateinit var valorAposta: TextView
     private lateinit var addAposta: TextView
     private lateinit var subAposta: TextView
     private lateinit var resultadoJogo: TextView
 
-    var fatecCoin: Int=1000
-    var aposta: Int = 10
-    var ganhos: Int = 0
-    var user=""
+    private var fatecCoin: Int=1000
+    private var aposta: Int = 10
+    private var ganhos: Int = 0
+    private var user=""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -67,28 +67,28 @@ class Roleta : AppCompatActivity() {
         fatecCoin = intentMain.getIntExtra("saldo",0)
         Log.d("saldo", fatecCoin.toString())
 
-        InfofatecCoin = findViewById(R.id.InfoCoins)
-        InfofatecCoin.text = fatecCoin.toString()
+        infofatecCoin = findViewById(R.id.InfoCoins)
+        infofatecCoin.text = fatecCoin.toString()
 
-        fatecCoin = InfofatecCoin.text.toString().toInt()
+        fatecCoin = infofatecCoin.text.toString().toInt()
 
         //ganhos
-        InfoGanhos = findViewById(R.id.InfoGanhos)
-        ganhos = InfoGanhos.text.toString().toInt()
+        infoGanhos = findViewById(R.id.InfoGanhos)
+        ganhos = infoGanhos.text.toString().toInt()
 
-        slots_col1 = arrayOf(
+        slotsCol1 = arrayOf(
             findViewById(R.id.slot1),
             findViewById(R.id.slot2),
             findViewById(R.id.slot3)
         )
 
-        slots_col2 = arrayOf(
+        slotsCol2 = arrayOf(
             findViewById(R.id.slot4),
             findViewById(R.id.slot5),
             findViewById(R.id.slot6)
         )
 
-        slots_col3 = arrayOf(
+        slotsCol3 = arrayOf(
             findViewById(R.id.slot7),
             findViewById(R.id.slot8),
             findViewById(R.id.slot9)
@@ -109,15 +109,15 @@ class Roleta : AppCompatActivity() {
         addCoins = findViewById(R.id.addCoins)
         addCoins.setOnClickListener {
             //abre tela de loja
-            val intent = Intent(this, mercado::class.java)
+            val intent = Intent(this, Mercado::class.java)
             intent.putExtra("nome", user)
             intent.putExtra("saldo", fatecCoin)
             startActivity(intent)
         }
 
         //home
-        btn_home = findViewById(R.id.imageViewHome)
-        btn_home.setOnClickListener {
+        btnHome = findViewById(R.id.imageViewHome)
+        btnHome.setOnClickListener {
             val intent = Intent(this, MainActivity::class.java)
             intent.putExtra("nome", user)
             intent.putExtra("saldo", fatecCoin)
@@ -181,7 +181,7 @@ class Roleta : AppCompatActivity() {
 
                             // Atualiza o saldo do usuário
                             fatecCoin = novoSaldo
-                            InfofatecCoin.text = novoSaldo.toString()
+                            infofatecCoin.text = novoSaldo.toString()
 
                             // Exibe a mensagem
                             resultadoJogo.text= message
@@ -210,7 +210,7 @@ class Roleta : AppCompatActivity() {
     private fun atualizarSlots(resultado: JSONArray) {
         //Anima Slots
 
-        slots_col1.forEach { slot ->
+        slotsCol1.forEach { slot ->
             // Animação de movimento para cima e para baixo
             val move = ValueAnimator.ofFloat(0f, 1500f, 0f)
             move.duration = 600
@@ -224,7 +224,7 @@ class Roleta : AppCompatActivity() {
             set.playTogether(move)
             set.start()
         }
-        slots_col2.forEach { slot ->
+        slotsCol2.forEach { slot ->
             // Animação de movimento para cima e para baixo
             val move = ValueAnimator.ofFloat(0f, 2000f, 0f)
             move.duration = 800
@@ -239,7 +239,7 @@ class Roleta : AppCompatActivity() {
             set.start()
         }
 
-        slots_col3.forEach { slot ->
+        slotsCol3.forEach { slot ->
             // Animação de movimento para cima e para baixo
             val move = ValueAnimator.ofFloat(0f, 2500f, 0f)
             move.duration = 1000
@@ -257,9 +257,9 @@ class Roleta : AppCompatActivity() {
         for (i in 0 until resultado.length()) {
             val coluna = resultado.getJSONArray(i)
             Log.d("coluna", coluna.toString())
-            slots_col1[i].setImageResource(getSymbolResource(coluna.getString(0)))
-            slots_col2[i].setImageResource(getSymbolResource(coluna.getString(1)))
-            slots_col3[i].setImageResource(getSymbolResource(coluna.getString(2)))
+            slotsCol1[i].setImageResource(getSymbolResource(coluna.getString(0)))
+            slotsCol2[i].setImageResource(getSymbolResource(coluna.getString(1)))
+            slotsCol3[i].setImageResource(getSymbolResource(coluna.getString(2)))
         }
     }
 
