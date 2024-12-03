@@ -18,7 +18,7 @@ import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import com.squareup.picasso.Picasso
+import org.json.JSONObject
 
 class Mercado : AppCompatActivity() {
     private var fatecCoin: Int=0
@@ -42,18 +42,6 @@ class Mercado : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-
-        //teste Picasso
-        val moedas1: ImageView = findViewById(R.id.moedas1)
-
-        val url="https://png.pngtree.com/png-vector/20240420/ourlarge/pngtree-pixel-art-wizard-character-for-rpg-game-in-retro-style-png-image_12302145.png"
-        Picasso.get()
-            .load(url)
-            .placeholder(R.drawable.avatar_elfo)
-            .error(R.drawable.avatar_elfo)
-            .into(moedas1);
-
-
 
         val intentMain = intent
         //get user
@@ -89,6 +77,8 @@ class Mercado : AppCompatActivity() {
             abreHome()
         }
 
+        //comrpa(35, 1)
+
     }
 
     private fun abreHome(){
@@ -100,7 +90,7 @@ class Mercado : AppCompatActivity() {
 
     private fun mostraItens() {
 
-        val url = "https://oncinha.brazilsouth.cloudapp.azure.com/apimobile/loja.php"  // Substitua pela URL do seu servidor
+        val url = "https://jungleoffortune.westus2.cloudapp.azure.com/v5/apimobile/loja.php"  // Substitua pela URL do seu servidor
 
         // Fazendo a requisição com Volley
         val requestQueue = Volley.newRequestQueue(this)
@@ -127,20 +117,39 @@ class Mercado : AppCompatActivity() {
                         val itemList: ArrayList<Item> = gson.fromJson(itens, itemType)
 
                         val itemBadges = itemList.filter  { it.tipo == "badge" }
+                        val itemAvatar = itemList.filter  { it.tipo == "avatar" }
 
                         //controi list
-                        val recyclerView: RecyclerView = findViewById(R.id.recyclerView)
-                        recyclerView.layoutManager = GridLayoutManager(this, 2) // 2 colunas
+                        val recyclerViewBadges: RecyclerView = findViewById(R.id.recyclerView)
+                        recyclerViewBadges.layoutManager = GridLayoutManager(this, 2) // 2 colunas
 
-                        val adapter = ItemAdapter(itemBadges)
-                        recyclerView.adapter = adapter
+                        val adapterBadge = ItemAdapter(itemBadges)
+                        recyclerViewBadges.adapter = adapterBadge
 
                         // Applying OnClickListener to our Adapter
-                        adapter.setOnClickListener(object :
+                        adapterBadge.setOnClickListener(object :
                             ItemAdapter.OnClickListener {
                             override fun onClick(position: Int, model: Item) {
                                 Toast.makeText(this@Mercado, "Clicked on  ${model.nome}", Toast.LENGTH_LONG).show()
                                 Log.d("Item", "${model}")
+
+                            }
+                        })
+
+                        //controi list
+                        val recyclerViewAvatar: RecyclerView = findViewById(R.id.recyclerViewAvatar)
+                        recyclerViewAvatar.layoutManager = GridLayoutManager(this, 2) // 2 colunas
+
+                        val adapterAvatar = ItemAdapter(itemAvatar)
+                        recyclerViewAvatar.adapter = adapterAvatar
+
+                        // Applying OnClickListener to our Adapter
+                        adapterBadge.setOnClickListener(object :
+                            ItemAdapter.OnClickListener {
+                            override fun onClick(position: Int, model: Item) {
+                                Toast.makeText(this@Mercado, "Clicked on  ${model.nome}", Toast.LENGTH_LONG).show()
+                                Log.d("Item", "${model}")
+
                             }
                         })
 
@@ -161,7 +170,47 @@ class Mercado : AppCompatActivity() {
         requestQueue.add(jsonObjectRequest)
 
     }
+    fun comrpa(user:Int, item:Int){
 
+        val jsonBody = JSONObject()
+        jsonBody.put("user_id", user)
+        jsonBody.put("item_id", item)
+
+        val url = "https://jungleoffortune.westus2.cloudapp.azure.com/v5/apimobile/loja.php"  // Substitua pela URL do seu servidor
+
+
+        // Fazendo a requisição com Volley
+        val requestQueue = Volley.newRequestQueue(this)
+        val jsonObjectRequest = JsonObjectRequest(
+            Request.Method.POST, url, jsonBody,
+            { response ->
+                try {
+
+                    println(response)
+                    // Lendo a resposta JSON
+                    val status = response.getString("status")
+                    if (status == "success") {
+                        // Log para debug
+
+                        Log.d("corpo", "Oiii")
+
+                    } else {
+                        val errorMessage = response.getString("message")
+                        Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT).show()
+                    }
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                    Toast.makeText(this, "Erro no processamento da resposta", Toast.LENGTH_SHORT).show()
+                }
+            },
+            {
+                Toast.makeText(this, "Erro na conexão com o servidor", Toast.LENGTH_SHORT).show()
+            }
+        )
+        // Adiciona a requisição à fila
+        requestQueue.add(jsonObjectRequest)
+
+    }
 }
 
 //loja.php

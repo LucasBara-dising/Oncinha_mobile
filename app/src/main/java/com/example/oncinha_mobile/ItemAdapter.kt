@@ -1,12 +1,13 @@
 package com.example.oncinha_mobile
 
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.squareup.picasso.Picasso
 
 
 class ItemAdapter(private val items: List<Item>) : RecyclerView.Adapter<ItemAdapter.ItemViewHolder>() {
@@ -22,10 +23,18 @@ class ItemAdapter(private val items: List<Item>) : RecyclerView.Adapter<ItemAdap
 
         holder.bind(item)
 
+        val urlImg = "https://jungleoffortune.westus2.cloudapp.azure.com/v5/" + item.imagem
+        Picasso.get()
+            .load(urlImg)
+            .placeholder(R.drawable.avatar_elfo)
+            .error(R.drawable.avatar_elfo)
+            .into(holder.img)
+
+
+
         // Set click listener for the item view
         //PAssa a acão
         holder.itemView.setOnClickListener {
-            //Log.d("OIOi", "Clicked $item")
             onClickListener?.onClick(position, item)
         }
     }
@@ -48,6 +57,9 @@ class ItemAdapter(private val items: List<Item>) : RecyclerView.Adapter<ItemAdap
     inner class ItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val nomeTextView: TextView = itemView.findViewById(R.id.descItem)
         private val precoTextView: TextView = itemView.findViewById(R.id.item_preco)
+        //teste Picasso
+        val img: ImageView = itemView.findViewById(R.id.img_card)
+
 
 
         fun bind(item: Item) {

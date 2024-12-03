@@ -4,7 +4,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -38,8 +37,6 @@ class MainActivity : AppCompatActivity() {
 
         textviewSaldo= findViewById(R.id.textView_saldo)
         textviewSaldo.text = "$ $saldo"
-
-        Toast.makeText(this, "Bom dia $user", Toast.LENGTH_SHORT).show()
 
         btnJogar = findViewById(R.id.image_btn_jogar)
         btnJogar.setOnClickListener {
